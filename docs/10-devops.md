@@ -33,6 +33,22 @@ Déclenchée à chaque *push* sur `main` / `develop` et chaque Pull Request.
 
 Les jobs `qualite` et `tests` s'exécutent en parallèle ; `docker` n'est lancé que s'ils réussissent. Le cache npm accélère les exécutions. La branche `main` doit être protégée (réglage GitHub : *Require status checks* sur ces trois jobs, *Require a pull request*).
 
+## Résultats d'exécution
+
+La chaîne a été exécutée sur GitHub Actions (dépôt `ARTHURGMD63/TitreB3`). Les premières exécutions ont échoué ; les causes ont été identifiées dans l'historique du dépôt puis corrigées, ce qui illustre l'intérêt de la CI.
+
+| Run | Commit | CI | CD | Cause de l'échec / correction |
+|---|---|---|---|---|
+| #1 et #2 | `58e3e18`, `8387998` | Échec (job Docker) | Échec (déploiement) | CI : tests au vert, mais action Trivy introuvable. CD : image publiée, déploiement SSH impossible car secrets `DEPLOY_*` absents |
+| #3 | `2f9fb6f` | Échec (tests de sécurité) | Échec (déploiement) | CI : le test de la CSP dépendait du build de l'interface Vue (corrigé : il vise `/api/health`). Même cause pour le CD que ci-dessus |
+| #4 | `7b1c923` | Échec (job Docker) | Échec (fichier invalide) | CI : action Trivy toujours introuvable, remplacée par l'image officielle `aquasec/trivy`. CD : phrase YAML non protégée (`: ` dans un `run`) rendant le fichier invalide |
+| **#5** | `27983ad` | **Succès** (1 min 21 s) | **Succès** (43 s) | Chaîne complète au vert |
+
+État au 15 octobre 2026 :
+- **CI** : lint, build de l'interface Vue, audit des dépendances, 99 tests (unitaires, intégration, sécurité), build de l'image Docker et analyse Trivy (aucune faille critique corrigeable) passent.
+- **CD** : l'image est publiée sur GitHub Container Registry (`ghcr.io/arthurgmd63/titreb3`).
+- **Déploiement SSH** : non exécuté, car aucun serveur n'est encore configuré. Les jobs de déploiement détectent l'absence des secrets `DEPLOY_*`, ignorent l'étape SSH et restent verts. Le déploiement s'activera dès que les secrets seront créés (voir ci-dessous).
+
 ## Livraison continue (`cd.yml`)
 
 | Événement | Actions |
@@ -40,7 +56,7 @@ Les jobs `qualite` et `tests` s'exécutent en parallèle ; `docker` n'est lancé
 | Fusion sur `main` | Construction et publication de l'image `ghcr.io/arthurgmd63/titreb3:main` (+ tag du commit) → déploiement automatique en **recette** |
 | Tag `vX.Y.Z` | Publication de l'image `:X.Y.Z` → job de déploiement **production**, suspendu jusqu'à approbation d'un relecteur (environnement GitHub `production` avec *Required reviewers*) |
 
-Le déploiement se connecte en SSH au serveur et exécute `docker compose pull && up -d`. Le conteneur `migrate` applique alors les migrations avant le démarrage de la nouvelle version.
+Le déploiement se connecte en SSH au serveur et exécute `docker compose pull && up -d`, **uniquement si le secret `DEPLOY_HOST` existe** ; sinon l'étape est ignorée et le workflow reste vert. Le conteneur `migrate` applique alors les migrations avant le démarrage de la nouvelle version.
 
 ### Secrets et configuration GitHub à créer
 

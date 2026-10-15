@@ -26,7 +26,7 @@ Ce tableau relie chaque compétence aux preuves présentes dans le dépôt (code
 |---|---|---|---|
 | 9 | Préparer et exécuter les plans de tests | [08-plan-de-tests.md](08-plan-de-tests.md) | `tests/unit`, `tests/integration`, `tests/security` : 99 tests exécutés, 97 % de couverture de lignes |
 | 10 | Préparer et documenter le déploiement | [09-deploiement.md](09-deploiement.md) | Environnements dev / recette / production, procédure pas à pas, retour arrière, exploitation |
-| 11 | Mise en production dans une démarche DevOps | [10-devops.md](10-devops.md) | `.github/workflows/ci.yml` et `cd.yml`, `Dockerfile`, `docker-compose.prod.yml`, `deploy/` |
+| 11 | Mise en production dans une démarche DevOps | [10-devops.md](10-devops.md) | `.github/workflows/ci.yml` et `cd.yml` (exécutés avec succès sur GitHub, voir [10-devops.md](10-devops.md#résultats-dexécution)), `Dockerfile`, `docker-compose.prod.yml`, `deploy/` |
 
 ## Fonctionnalités du cahier des charges
 

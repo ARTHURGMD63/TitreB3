@@ -63,7 +63,7 @@ Exécution : `npm test` (ou `test:unit`, `test:integration`, `test:security`). L
 
 ## Résultats d'exécution
 
-Exécution complète sur le poste de développement (Node.js 24, PostgreSQL 16, MongoDB 7 sous Docker) :
+Exécution complète sur le poste de développement (Node.js 24, PostgreSQL 16, MongoDB 7 sous Docker). La même suite est exécutée automatiquement par la CI GitHub Actions (Node.js 22, conteneurs de service PostgreSQL 16 et MongoDB 7) : voir « Exécution en intégration continue » plus bas.
 
 | Suite | Tests | Réussis | Échecs |
 |---|---:|---:|---:|
@@ -89,6 +89,20 @@ Autres contrôles : `npm run lint` sans erreur ni avertissement ; `npm audit` : 
 | Anomalie | Découverte par | Correction |
 |---|---|---|
 | Le test de quotas simultanés échouait (1 réservation au lieu de 3) | Intégration | Défaut d'isolation des tests : le quota modifié par un test précédent n'était pas réinitialisé. `tests/helpers.js` remet maintenant les profils à leurs valeurs initiales avant chaque test. |
+| Le test de la politique CSP échouait sur la CI (`default-src 'none'` au lieu de `'self'`) mais pas en local | CI (run #3, après l'arrivée de l'interface Vue) | Le test interrogeait la page d'accueil, qui n'existe qu'après le build de l'interface Vue ; sans build, la réponse 404 de base écrase l'en-tête. Le test vise maintenant `/api/health`, indépendant du build. Reproduit et corrigé dans un clone neuf du dépôt, sans fichier `.env`. |
+
+### Exécution en intégration continue
+
+Les trois suites (unitaires, intégration, sécurité) s'exécutent à chaque *push* dans le job `tests` du workflow [`ci.yml`](../.github/workflows/ci.yml), sur des conteneurs de service PostgreSQL 16 et MongoDB 7 créés pour l'occasion.
+
+| Run | Commit | Résultat | Cause / remarque |
+|---|---|---|---|
+| CI #1 et #2 | `58e3e18`, `8387998` | Tests au vert, job Docker en échec | Action Trivy introuvable (version inexistante) |
+| CI #3 | `2f9fb6f` | Échec du job de tests de sécurité | Après le passage de l'interface à Vue, le test de la CSP dépendait du build (voir tableau ci-dessus) |
+| CI #4 | `7b1c923` | Tests au vert, job Docker en échec | Action Trivy toujours introuvable |
+| **CI #5** | `27983ad` | **Succès complet** (1 min 21 s) | Lint, build de l'interface, audit, 99 tests, build Docker, analyse Trivy |
+
+Dernière vérification : 15 octobre 2026.
 
 ## Recette manuelle de l'interface (parcours à dérouler en recette)
 
