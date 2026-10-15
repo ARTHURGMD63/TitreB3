@@ -1,6 +1,8 @@
 # Livraison continue : publie l'image Docker sur GitHub Container Registry puis déploie.
 #   - push sur main  -> image "recette" déployée automatiquement sur l'environnement de recette
 #   - tag vX.Y.Z     -> image versionnée, déploiement en production après validation manuelle
+# Le déploiement SSH n'est exécuté que si les secrets DEPLOY_HOST, DEPLOY_USER et DEPLOY_SSH_KEY existent
+# (sans serveur configuré, l'étape est ignorée et le workflow reste vert).
 name: CD
 
 on:
@@ -49,8 +51,14 @@ jobs:
     needs: publier
     runs-on: ubuntu-latest
     environment: recette
+    env:
+      DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
     steps:
+      - name: Serveur non configuré
+        if: env.DEPLOY_HOST == ''
+        run: echo "Secrets DEPLOY_* absents : déploiement ignoré (voir docs/10-devops.md)."
       - name: Déploiement par SSH
+        if: env.DEPLOY_HOST != ''
         uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.DEPLOY_HOST }}
@@ -69,8 +77,14 @@ jobs:
     runs-on: ubuntu-latest
     # L'environnement "production" est configuré avec des relecteurs obligatoires : validation manuelle avant déploiement
     environment: production
+    env:
+      DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
     steps:
+      - name: Serveur non configuré
+        if: env.DEPLOY_HOST == ''
+        run: echo "Secrets DEPLOY_* absents : déploiement ignoré (voir docs/10-devops.md)."
       - name: Déploiement par SSH
+        if: env.DEPLOY_HOST != ''
         uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.DEPLOY_HOST }}

@@ -79,7 +79,7 @@ describe('XSS', () => {
 
   it('applique une Content-Security-Policy stricte (pas de script ni de style inline)', async () => {
     const c = await client();
-    const csp = (await c.get('/')).headers['content-security-policy'];
+    const csp = (await c.get('/api/health')).headers['content-security-policy'];
     assert.match(csp, /default-src 'self'/);
     assert.match(csp, /script-src 'self'(;|$)/);
     assert.match(csp, /style-src 'self'(;|$)/);
