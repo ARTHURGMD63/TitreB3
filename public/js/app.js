@@ -56,6 +56,11 @@ async function router() {
     remplacer(contenu, h('h1', {}, 'Page introuvable'), h('p', {}, h('a', { href: '#/' }, "Retour à l'accueil")));
     return;
   }
+  // Déjà connecté : inutile d'afficher connexion / inscription
+  if (session.utilisateur && /^\/(connexion|inscription|mot-de-passe-oublie)$/.test(chemin)) {
+    location.hash = '#/';
+    return;
+  }
   if ((route.connecte || route.roles) && !session.utilisateur) {
     location.hash = '#/connexion';
     return;
