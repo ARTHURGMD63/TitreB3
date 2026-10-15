@@ -41,7 +41,7 @@ async function enregistrer(u) {
       <h2 id="t-users">Utilisateurs <span class="mono doux">{{ filtres.length }}</span></h2>
       <ChampTexte v-model="recherche" label="Rechercher un utilisateur" masquer-label type="search" placeholder="Nom ou e-mail" />
     </div>
-    <div class="defilement">
+    <div class="defilement" tabindex="0" role="region" aria-label="Utilisateurs, défilement horizontal">
       <table class="empile">
         <thead><tr><th scope="col">Nom</th><th scope="col">Rôle</th><th scope="col">Profil</th><th scope="col">Compte</th></tr></thead>
         <tbody>

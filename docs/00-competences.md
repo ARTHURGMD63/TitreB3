@@ -7,7 +7,7 @@ Ce tableau relie chaque compétence aux preuves présentes dans le dépôt (code
 | # | Compétence | Où la trouver | Preuves principales |
 |---|---|---|---|
 | 1 | Installer et configurer son environnement de travail | [01-environnement.md](01-environnement.md) | `package.json`, `docker-compose.yml`, `.env.example`, `eslint.config.js`, `.gitignore`, `CONTRIBUTING.md` |
-| 2 | Développer des interfaces utilisateur (sécurisées, RGAA) | [04-maquettes.md](04-maquettes.md), [12-design-registre.md](12-design-registre.md), [11-securite-rgpd-rgaa.md](11-securite-rgpd-rgaa.md) | `client/` (Vue 3 : composants, vues, routeur), `CalendrierRessource.vue` (calendrier accessible), règle ESLint `vue/no-v-html` (anti-XSS), CSP dans `src/app.js` |
+| 2 | Développer des interfaces utilisateur (sécurisées, RGAA) | [04-maquettes.md](04-maquettes.md), [12-design-registre.md](12-design-registre.md), [13-audit-rgaa.md](13-audit-rgaa.md), [11-securite-rgpd-rgaa.md](11-securite-rgpd-rgaa.md) | `client/` (Vue 3 : composants, vues, routeur), `CalendrierRessource.vue` (calendrier accessible), règle ESLint `vue/no-v-html` (anti-XSS), CSP dans `src/app.js` |
 | 3 | Développer des composants métier | [05-architecture.md](05-architecture.md) | `src/services/` : `reservationService.js`, `regles/` (créneaux, quotas, workflow), tests unitaires `tests/unit/` |
 | 4 | Contribuer à la gestion d'un projet informatique | [02-gestion-projet.md](02-gestion-projet.md) | Méthode Scrum, backlog, sprints, planning, `.github/` (templates PR et tickets), `CONTRIBUTING.md` |
 

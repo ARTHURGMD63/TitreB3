@@ -93,7 +93,7 @@ async function supprimerCompte() {
             <button type="button" :aria-pressed="String(periode === 'passe')" @click="choisirPeriode('passe')">Passées</button>
           </div>
         </div>
-        <div v-if="reservations.length" class="defilement">
+        <div v-if="reservations.length" class="defilement" tabindex="0" role="region" aria-label="Mes réservations, défilement horizontal">
           <table class="empile">
             <thead><tr><th scope="col">Ressource</th><th scope="col">Date</th><th scope="col">Horaire</th><th scope="col">Statut</th><th scope="col"><span class="sr-only">Actions</span></th></tr></thead>
             <tbody>

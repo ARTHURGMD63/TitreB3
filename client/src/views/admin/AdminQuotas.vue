@@ -20,7 +20,7 @@ async function enregistrer() {
   <section class="carte" aria-labelledby="t-quotas">
     <div class="pile serree"><h2 id="t-quotas">Quotas par profil</h2><p class="doux">Les réservations en attente et validées à venir comptent dans le nombre de réservations actives.</p></div>
     <form class="pile" @submit.prevent="enregistrer">
-      <div class="defilement">
+      <div class="defilement" tabindex="0" role="region" aria-label="Quotas, défilement horizontal">
         <table class="empile">
           <thead><tr><th scope="col">Profil</th><th scope="col">Réservations actives</th><th scope="col">Durée max. (min)</th><th scope="col">Anticipation max. (jours)</th></tr></thead>
           <tbody>

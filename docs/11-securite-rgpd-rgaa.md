@@ -41,4 +41,4 @@
 
 ## Accessibilité (RGAA)
 
-Détail et correspondance critère par critère : [04-maquettes.md](04-maquettes.md#accessibilité-rgaa-4). Points structurants : calendrier en vrai tableau HTML avec boutons natifs, états indiqués par du texte, annonces `aria-live`, focus géré à chaque changement de page, boîtes de dialogue natives, contrastes ≥ 5:1 (calculés), respect de `prefers-reduced-motion`.
+Détail et correspondance critère par critère : [04-maquettes.md](04-maquettes.md#accessibilité-rgaa-4). Audit automatique (axe-core, 0 violation après correction de 3 défauts) et grilles de vérification manuelle (clavier, lecteur d'écran) : [13-audit-rgaa.md](13-audit-rgaa.md). Points structurants : calendrier en vrai tableau HTML avec boutons natifs, états indiqués par du texte, annonces `aria-live`, focus géré à chaque changement de page, boîtes de dialogue natives, contrastes ≥ 5:1 (calculés), respect de `prefers-reduced-motion`.

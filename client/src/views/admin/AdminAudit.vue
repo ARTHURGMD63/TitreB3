@@ -55,7 +55,7 @@ const resume = (e) => (e.avant || e.apres ? JSON.stringify({ avant: e.avant, apr
     </form>
 
     <template v-if="resultat.elements.length">
-      <div class="defilement">
+      <div class="defilement" tabindex="0" role="region" aria-label="Journal d'audit, défilement horizontal">
         <table class="empile">
           <thead><tr><th scope="col">Date et heure</th><th scope="col">Utilisateur</th><th scope="col">Action</th><th scope="col">Cible</th><th scope="col">IP</th><th scope="col">Détail</th></tr></thead>
           <tbody>

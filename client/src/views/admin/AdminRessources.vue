@@ -63,7 +63,7 @@ async function desactiver() {
       <h2 id="t-ress">Ressources <span class="mono doux">{{ ressources.length }}</span></h2>
       <button type="button" @click="ouvrir(null)"><Icone nom="plus" />Ajouter une ressource</button>
     </div>
-    <div class="defilement">
+    <div class="defilement" tabindex="0" role="region" aria-label="Ressources, défilement horizontal">
       <table class="empile">
         <thead><tr><th scope="col">Nom</th><th scope="col">Type</th><th scope="col">Capacité</th><th scope="col">Lieu</th><th scope="col">Validation</th><th scope="col">Responsable</th><th scope="col"><span class="sr-only">Actions</span></th></tr></thead>
         <tbody>

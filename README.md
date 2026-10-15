@@ -51,6 +51,7 @@ npm run test:unit         # sans base de données
 | [docs/10-devops.md](docs/10-devops.md) | CI/CD, conteneurs, automatisation |
 | [docs/11-securite-rgpd-rgaa.md](docs/11-securite-rgpd-rgaa.md) | Sécurité, RGPD, accessibilité |
 | [docs/12-design-registre.md](docs/12-design-registre.md) | Design de l'interface (direction « Registre ») |
+| [docs/13-audit-rgaa.md](docs/13-audit-rgaa.md) | Audit d'accessibilité (résultats et grilles manuelles) |
 | [docs/API.md](docs/API.md) | Référence de l'API |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | Workflow Git et conventions |
 

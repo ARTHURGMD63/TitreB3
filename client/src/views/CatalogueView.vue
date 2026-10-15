@@ -54,6 +54,7 @@ function reinitialiser() {
     <ChampTexte v-model="filtres.date" label="Date" type="date" />
   </form>
 
+  <h2 v-if="ressources.length" class="sr-only">Ressources</h2>
   <div v-if="ressources.length" class="grille">
     <CarteRessource v-for="r in ressources" :key="r.id" :ressource="r" />
   </div>

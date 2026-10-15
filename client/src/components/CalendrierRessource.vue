@@ -191,9 +191,9 @@ defineExpose({ recharger: charger });
           <td v-for="j in semaine" :key="cle(j)">
             <template v-for="r in [resumeJour(j)]" :key="`${cle(j)}-${r.libres}`">
               <span v-if="r.passe || !r.total" class="cellule ferme"><b>{{ j.j }}</b><span>{{ r.passe ? 'Passé' : 'Fermé' }}</span></span>
-              <button v-else type="button" class="cellule" :aria-label="`${libelleJour(j)}, ${r.libres ? `${r.libres} créneaux libres` : 'complet'}, ouvrir la vue jour`"
-                :aria-current="cle(j) === aujourdhuiCle ? 'date' : undefined" @click="ouvrirJour(j)">
+              <button v-else type="button" class="cellule" :aria-current="cle(j) === aujourdhuiCle ? 'date' : undefined" @click="ouvrirJour(j)">
                 <b>{{ j.j }}</b><span>{{ r.libres ? `${r.libres} libres` : 'Complet' }}</span>
+                <span class="sr-only">, {{ libelleJour(j) }}, ouvrir la vue jour</span>
                 <progress class="jauge" :max="r.total" :value="r.occupees" aria-hidden="true" />
               </button>
             </template>
