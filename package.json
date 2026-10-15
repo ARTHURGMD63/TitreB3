@@ -1,0 +1,43 @@
+{
+  "name": "plateforme-reservation",
+  "version": "1.0.0",
+  "description": "Plateforme de réservation de salles et de matériel (projet Titre Pro B3)",
+  "type": "module",
+  "private": true,
+  "author": "Arthur Gramond",
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch --env-file-if-exists=.env src/server.js",
+    "db:init": "node --env-file-if-exists=.env scripts/init-db.js",
+    "db:seed": "node --env-file-if-exists=.env scripts/seed.js",
+    "lint": "eslint .",
+    "test": "node --env-file-if-exists=.env --test --test-concurrency=1 tests/**/*.test.js",
+    "test:unit": "node --test tests/unit/*.test.js",
+    "test:integration": "node --env-file-if-exists=.env --test --test-concurrency=1 tests/integration/*.test.js",
+    "test:security": "node --env-file-if-exists=.env --test --test-concurrency=1 tests/security/*.test.js",
+    "audit": "npm audit --audit-level=high --omit=dev"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "compression": "^1.7.5",
+    "cookie-parser": "^1.4.7",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.0",
+    "helmet": "^8.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.12.0",
+    "nodemailer": "^10.1.1",
+    "pg": "^8.13.1",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "eslint": "^9.17.0",
+    "globals": "^15.14.0",
+    "supertest": "^7.0.0"
+  }
+}

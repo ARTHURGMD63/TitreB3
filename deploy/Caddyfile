@@ -1,0 +1,9 @@
+# Proxy HTTPS : le certificat est obtenu et renouvelé automatiquement.
+{$DOMAINE} {
+	encode zstd gzip
+	reverse_proxy app:3000
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		-Server
+	}
+}

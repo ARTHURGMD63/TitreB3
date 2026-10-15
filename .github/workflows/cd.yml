@@ -1,0 +1,83 @@
+# Livraison continue : publie l'image Docker sur GitHub Container Registry puis déploie.
+#   - push sur main  -> image "recette" déployée automatiquement sur l'environnement de recette
+#   - tag vX.Y.Z     -> image versionnée, déploiement en production après validation manuelle
+name: CD
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*.*.*"]
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  IMAGE: ghcr.io/arthurgmd63/titreb3
+
+jobs:
+  publier:
+    name: Publier l'image
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.meta.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.IMAGE }}
+          tags: |
+            type=ref,event=branch
+            type=semver,pattern={{version}}
+            type=sha
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+  deployer-recette:
+    name: Déploiement en recette
+    if: github.ref == 'refs/heads/main'
+    needs: publier
+    runs-on: ubuntu-latest
+    environment: recette
+    steps:
+      - name: Déploiement par SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          script: |
+            cd /opt/reservation
+            docker compose -f docker-compose.prod.yml --env-file .env.recette pull
+            docker compose -f docker-compose.prod.yml --env-file .env.recette up -d
+            docker image prune -f
+
+  deployer-production:
+    name: Déploiement en production
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: publier
+    runs-on: ubuntu-latest
+    # L'environnement "production" est configuré avec des relecteurs obligatoires : validation manuelle avant déploiement
+    environment: production
+    steps:
+      - name: Déploiement par SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          script: |
+            cd /opt/reservation
+            docker compose -f docker-compose.prod.yml --env-file .env.prod pull
+            docker compose -f docker-compose.prod.yml --env-file .env.prod up -d
+            docker image prune -f

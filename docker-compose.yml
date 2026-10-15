@@ -1,0 +1,79 @@
+# Environnement de DÉVELOPPEMENT
+#   docker compose up -d                     -> bases + Mailhog (l'app tourne avec `npm run dev`)
+#   docker compose --profile full up --build -> tout, application comprise (migrations + données de démo)
+name: reservation
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: reservation
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres_dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d reservation"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  mongo:
+    image: mongo:7
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  mailhog:
+    image: mailhog/mailhog:v1.0.1
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+
+  # Tâche ponctuelle : applique les migrations SQL (compte admin) puis charge les données de démo
+  migrate:
+    profiles: ["full"]
+    build: .
+    command: ["node", "scripts/init-db.js"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgres://resa_app:resa_app_dev@postgres:5432/reservation
+      DATABASE_ADMIN_URL: postgres://postgres:postgres_dev@postgres:5432/reservation
+      APP_DB_PASSWORD: resa_app_dev
+      SEED_PASSWORD: Demo-Passw0rd!
+      RUN_SEED: "true"
+
+  app:
+    profiles: ["full"]
+    build: .
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      mongo:
+        condition: service_healthy
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+      APP_URL: http://localhost:3000
+      DATABASE_URL: postgres://resa_app:resa_app_dev@postgres:5432/reservation
+      MONGO_URL: mongodb://mongo:27017
+      MONGO_DB: reservation_audit
+      JWT_SECRET: dev-secret-a-remplacer-par-une-valeur-aleatoire-longue
+      SMTP_HOST: mailhog
+      SMTP_PORT: 1025
+    ports:
+      - "3000:3000"
+
+volumes:
+  pg_data:
+  mongo_data:

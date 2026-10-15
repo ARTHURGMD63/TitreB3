@@ -1,0 +1,101 @@
+# Environnements RECETTE et PRODUCTION (même fichier, valeurs différentes dans le fichier d'environnement)
+#   docker compose -f docker-compose.prod.yml --env-file .env.prod up -d
+# Aucun port de base de données n'est publié : seul le proxy HTTPS (Caddy) est exposé.
+name: reservation-${ENVIRONNEMENT:-prod}
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: reservation
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_ADMIN_PASSWORD:?à définir dans le fichier d'environnement}
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    networks: [interne]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d reservation"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+
+  mongo:
+    image: mongo:7
+    restart: unless-stopped
+    volumes:
+      - mongo_data:/data/db
+    networks: [interne]
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  # Migrations SQL : seul ce conteneur ponctuel connaît le mot de passe administrateur
+  migrate:
+    image: ${APP_IMAGE:?à définir}
+    command: ["node", "scripts/init-db.js"]
+    restart: "no"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgres://resa_app:${APP_DB_PASSWORD:?}@postgres:5432/reservation
+      DATABASE_ADMIN_URL: postgres://postgres:${POSTGRES_ADMIN_PASSWORD}@postgres:5432/reservation
+      APP_DB_PASSWORD: ${APP_DB_PASSWORD}
+    networks: [interne]
+
+  app:
+    image: ${APP_IMAGE}
+    restart: unless-stopped
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      mongo:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      APP_URL: https://${DOMAINE:?}
+      TRUST_PROXY: "1"
+      DATABASE_URL: postgres://resa_app:${APP_DB_PASSWORD}@postgres:5432/reservation
+      MONGO_URL: mongodb://mongo:27017
+      MONGO_DB: reservation_audit
+      AUDIT_RETENTION_DAYS: ${AUDIT_RETENTION_DAYS:-365}
+      JWT_SECRET: ${JWT_SECRET:?au moins 32 caractères}
+      SMTP_HOST: ${SMTP_HOST:?}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      MAIL_FROM: ${MAIL_FROM:?}
+    networks: [interne]
+
+  # Proxy inverse : terminaison HTTPS (certificat Let's Encrypt automatique) et redirection HTTP -> HTTPS
+  proxy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    depends_on: [app]
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      DOMAINE: ${DOMAINE}
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+    networks: [interne]
+
+  # Recette uniquement : boîte mail de test (docker compose --profile recette ...)
+  mailhog:
+    profiles: ["recette"]
+    image: mailhog/mailhog:v1.0.1
+    networks: [interne]
+    ports:
+      - "127.0.0.1:8025:8025"
+
+networks:
+  interne:
+
+volumes:
+  pg_data:
+  mongo_data:
+  caddy_data:
