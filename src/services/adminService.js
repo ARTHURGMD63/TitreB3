@@ -38,7 +38,7 @@ export async function statistiques(du, au) {
   const [occupation, demandees, saturés, statuts, annulations] = await Promise.all([
     statsRepo.tauxOccupation(du, au),
     statsRepo.ressourcesLesPlusDemandees(du, au),
-    statsRepo.creneauxSatures(du, au, config.fuseau),
+    statsRepo.creneauxSatures(du, au, config.fuseau, 200),
     statsRepo.repartitionStatuts(du, au),
     statsRepo.annulations(du, au)
   ]);

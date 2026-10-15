@@ -4,7 +4,7 @@ Application web de réservation (salles, laboratoires, gymnase, vidéoprojecteur
 
 - **Trois profils** : utilisateur, responsable (valide les demandes), administrateur (comptes, ressources, quotas, statistiques, audit).
 - **Cœur** : calendrier jour / semaine / mois, **aucun double booking** (contrôle applicatif + contrainte d'exclusion PostgreSQL), alternatives proposées, quotas par profil, workflow de validation, notifications, journal d'audit.
-- **Stack** : Node.js 22 · Express · PostgreSQL 16 (données métier) · MongoDB 7 (journal d'audit) · interface HTML/CSS/JS sans framework · Docker · GitHub Actions.
+- **Stack** : Node.js 22 · Express · PostgreSQL 16 (données métier) · MongoDB 7 (journal d'audit) · interface **Vue 3** (Vite, Vue Router) · Docker · GitHub Actions.
 
 ## Démarrage rapide
 
@@ -18,6 +18,7 @@ cp .env.example .env
 docker compose up -d      # PostgreSQL, MongoDB, Mailhog
 npm run db:init           # migrations
 npm run db:seed           # données de démonstration
+npm run build             # construit l'interface Vue (client/dist)
 npm run dev               # http://localhost:3000
 ```
 
@@ -49,6 +50,7 @@ npm run test:unit         # sans base de données
 | [docs/09-deploiement.md](docs/09-deploiement.md) | Environnements et procédure de déploiement |
 | [docs/10-devops.md](docs/10-devops.md) | CI/CD, conteneurs, automatisation |
 | [docs/11-securite-rgpd-rgaa.md](docs/11-securite-rgpd-rgaa.md) | Sécurité, RGPD, accessibilité |
+| [docs/12-design-registre.md](docs/12-design-registre.md) | Design de l'interface (direction « Registre ») |
 | [docs/API.md](docs/API.md) | Référence de l'API |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | Workflow Git et conventions |
 

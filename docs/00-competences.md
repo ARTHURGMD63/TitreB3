@@ -7,7 +7,7 @@ Ce tableau relie chaque compétence aux preuves présentes dans le dépôt (code
 | # | Compétence | Où la trouver | Preuves principales |
 |---|---|---|---|
 | 1 | Installer et configurer son environnement de travail | [01-environnement.md](01-environnement.md) | `package.json`, `docker-compose.yml`, `.env.example`, `eslint.config.js`, `.gitignore`, `CONTRIBUTING.md` |
-| 2 | Développer des interfaces utilisateur (sécurisées, RGAA) | [04-maquettes.md](04-maquettes.md), [11-securite-rgpd-rgaa.md](11-securite-rgpd-rgaa.md) | `public/` (HTML, CSS, JS), `public/js/dom.js` (anti-XSS), `public/js/calendrier.js` (calendrier accessible), CSP dans `src/app.js` |
+| 2 | Développer des interfaces utilisateur (sécurisées, RGAA) | [04-maquettes.md](04-maquettes.md), [12-design-registre.md](12-design-registre.md), [11-securite-rgpd-rgaa.md](11-securite-rgpd-rgaa.md) | `client/` (Vue 3 : composants, vues, routeur), `CalendrierRessource.vue` (calendrier accessible), règle ESLint `vue/no-v-html` (anti-XSS), CSP dans `src/app.js` |
 | 3 | Développer des composants métier | [05-architecture.md](05-architecture.md) | `src/services/` : `reservationService.js`, `regles/` (créneaux, quotas, workflow), tests unitaires `tests/unit/` |
 | 4 | Contribuer à la gestion d'un projet informatique | [02-gestion-projet.md](02-gestion-projet.md) | Méthode Scrum, backlog, sprints, planning, `.github/` (templates PR et tickets), `CONTRIBUTING.md` |
 
@@ -33,13 +33,13 @@ Ce tableau relie chaque compétence aux preuves présentes dans le dépôt (code
 | Fonctionnalité | Implémentation |
 |---|---|
 | 1. Authentification et comptes | bcrypt, JWT en cookie HttpOnly, verrouillage, réinitialisation par email — `src/services/authService.js` |
-| 2. Catalogue des ressources | Filtres type / capacité / disponibilité, administration — `ressourceService.js`, `public/js/pages/catalogue.js` |
-| 3. Calendrier et réservation | Vues jour / semaine / mois accessibles — `public/js/calendrier.js` |
+| 2. Catalogue des ressources | Filtres type / capacité / disponibilité, administration — `ressourceService.js`, `client/src/views/CatalogueView.vue` |
+| 3. Calendrier et réservation | Vues jour / semaine / mois accessibles — `client/src/components/CalendrierRessource.vue` |
 | 4. Gestion des conflits | Contrôle applicatif + contrainte d'exclusion PostgreSQL + alternatives proposées |
 | 5. Quotas par profil | `regles/quotas.js`, profils éditables par l'administrateur |
 | 6. Workflow de validation | `regles/workflow.js` : en attente → validée / refusée → terminée / annulée |
 | 7. Notifications | Emails (Mailhog en développement) + notifications internes + rappel la veille |
-| 8. Espace personnel | `public/js/pages/monEspace.js` |
+| 8. Espace personnel | `client/src/views/MonEspaceView.vue` |
 | 9. Tableaux de bord | Espace responsable, statistiques SQL d'agrégation — `statsRepo.js` |
 | 10. Journal d'audit | MongoDB, index TTL de conservation — `auditRepo.js` |
 | Extension non réalisée | Réservations récurrentes (hors MVP, voir backlog) |

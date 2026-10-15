@@ -22,6 +22,8 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run lint
+      - name: Build de l'interface Vue
+        run: npm run build
       - name: Audit de sécurité des dépendances de production
         run: npm run audit
 

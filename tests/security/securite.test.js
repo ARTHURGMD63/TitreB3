@@ -88,23 +88,26 @@ describe('XSS', () => {
     assert.doesNotMatch(csp, /unsafe-inline|unsafe-eval/);
   });
 
-  it("n'utilise aucune API DOM dangereuse dans le code de l'interface", async () => {
-    const racine = path.join(import.meta.dirname, '..', '..', 'public');
+  it("n'utilise aucune API dangereuse (v-html, innerHTML, eval, styles ou scripts inline) dans l'interface Vue", async () => {
+    const racine = path.join(import.meta.dirname, '..', '..', 'client');
     const fichiers = [];
     async function parcourir(dossier) {
       for (const e of await readdir(dossier, { withFileTypes: true })) {
         const chemin = path.join(dossier, e.name);
-        if (e.isDirectory()) await parcourir(chemin);
-        else if (/\.(js|html)$/.test(e.name)) fichiers.push(chemin);
+        if (e.isDirectory()) { if (e.name !== 'dist' && e.name !== 'node_modules') await parcourir(chemin); }
+        else if (/\.(js|vue|html)$/.test(e.name)) fichiers.push(chemin);
       }
     }
     await parcourir(racine);
-    assert.ok(fichiers.length > 5);
+    assert.ok(fichiers.length > 20);
     for (const f of fichiers) {
       const contenu = await readFile(f, 'utf8');
-      assert.doesNotMatch(contenu, /innerHTML|outerHTML|insertAdjacentHTML|document\.write|\beval\(|new Function\(/, f);
-      if (f.endsWith('.html')) assert.doesNotMatch(contenu, /<script(?![^>]*\bsrc=)[^>]*>|\son\w+=|style=/i, `${f} contient du code ou style inline`);
+      assert.doesNotMatch(contenu, /v-html|innerHTML|outerHTML|insertAdjacentHTML|document\.write|\beval\(|new Function\(/, f);
+      // La CSP interdit les attributs style et les gestionnaires inline
+      if (/\.(vue|html)$/.test(f)) assert.doesNotMatch(contenu, /\son(click|load|error|mouseover)="|\sstyle="/i, `${f} contient un gestionnaire ou un style inline`);
     }
+    const index = await readFile(path.join(racine, 'index.html'), 'utf8');
+    assert.doesNotMatch(index, /<script(?![^>]*\bsrc=)/i, 'index.html contient un script inline');
   });
 });
 

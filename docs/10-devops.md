@@ -27,7 +27,7 @@ Déclenchée à chaque *push* sur `main` / `develop` et chaque Pull Request.
 
 | Job | Contenu | Échec si… |
 |---|---|---|
-| `qualite` | `npm ci`, ESLint, `npm audit --audit-level=high --omit=dev` | une erreur de lint ou une vulnérabilité haute dans les dépendances de production |
+| `qualite` | `npm ci`, ESLint (serveur et composants Vue), build de l'interface Vue (Vite), `npm audit --audit-level=high --omit=dev` | une erreur de lint, un build qui échoue ou une vulnérabilité haute dans les dépendances de production |
 | `tests` | Conteneurs de service PostgreSQL 16 et MongoDB 7 ; tests unitaires, puis d'intégration, puis de sécurité | un test échoue |
 | `docker` | Construction de l'image, analyse **Trivy** (vulnérabilités critiques corrigeables) | l'image ne se construit pas ou contient une faille critique |
 
@@ -58,7 +58,7 @@ Le déploiement se connecte en SSH au serveur et exécute `docker compose pull &
 
 | Élément | Choix |
 |---|---|
-| `Dockerfile` | Construction en 2 étapes : dépendances de production (`npm ci --omit=dev`) puis image finale sur `node:22-alpine` ; **utilisateur non-root** ; `HEALTHCHECK` sur `/api/health` ; aucun outil de développement ni test dans l'image |
+| `Dockerfile` | Construction en 3 étapes : build de l'interface Vue (Vite), dépendances de production du serveur (`npm ci --omit=dev`), puis image finale (qui ne contient que `client/dist`, sans Node-Vite ni sources) sur `node:22-alpine` ; **utilisateur non-root** ; `HEALTHCHECK` sur `/api/health` ; aucun outil de développement ni test dans l'image |
 | `docker-compose.yml` | Développement : PostgreSQL, MongoDB, Mailhog ; profil `full` pour exécuter aussi l'application (avec migrations et données de démonstration) |
 | `docker-compose.prod.yml` | Recette / production : réseau interne, **aucun port de base exposé**, redémarrage automatique, volumes nommés, secrets obligatoires (`:?` fait échouer le démarrage s'ils manquent), conteneur de migration séparé qui seul connaît le mot de passe administrateur, proxy Caddy en HTTPS |
 | Santé | Chaque service a un `healthcheck` ; l'ordre de démarrage s'appuie dessus (`service_healthy`, `service_completed_successfully`) |

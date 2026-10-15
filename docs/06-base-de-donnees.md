@@ -103,4 +103,4 @@ Aucun droit `DDL`, `TRUNCATE` ni `DROP` : même une injection SQL réussie ne po
 | Droit à l'effacement (art. 17) | `DELETE /api/me` : email remplacé par `supprime-<id>@anonyme.invalid`, nom effacé, mot de passe remplacé par un hash aléatoire, compte désactivé, notifications supprimées, adresses IP retirées du journal. Les réservations restent, sans lien avec une identité. |
 | Sécurité (art. 32) | Mots de passe hachés, jetons stockés hachés, accès restreint, chiffrement en transit (HTTPS). |
 | Responsabilité | Le journal d'audit trace l'export et la suppression de données. |
-| Information | Mention dans le pied de page ; à compléter par une politique de confidentialité (registre des traitements, durées) avant mise en service réelle. |
+| Information | Case de consentement à l'inscription, export et suppression dans « Mon espace » ; à compléter par une politique de confidentialité (registre des traitements, durées) avant mise en service réelle. |

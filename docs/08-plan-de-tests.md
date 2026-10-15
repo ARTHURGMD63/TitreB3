@@ -53,7 +53,7 @@ Exécution : `npm test` (ou `test:unit`, `test:integration`, `test:security`). L
 |---|---|
 | A03 Injection SQL | Charges `' OR '1'='1`, `DROP TABLE`, `UNION SELECT`, `pg_sleep` sur connexion et recherche ; identifiants numériques piégés ; jokers LIKE ; la table existe toujours |
 | A03 Injection NoSQL | `acteur_id[$ne]`, `action[$regex]`, objet à la place de l'email |
-| A03 XSS | `<img onerror>` renvoyé en JSON non interprété ; CSP stricte (`script-src 'self'`, sans `unsafe-inline`) ; **analyse statique** : aucun `innerHTML`, `eval`, script ou style inline dans `public/` |
+| A03 XSS | `<img onerror>` renvoyé en JSON non interprété ; CSP stricte (`script-src 'self'`, sans `unsafe-inline`) ; **analyse statique** : aucun `v-html`, `innerHTML`, `eval`, script ni style inline dans `client/` |
 | A01 CSRF | Requête sans jeton, avec faux jeton, depuis une autre origine ; cookie `HttpOnly` + `SameSite=Strict` |
 | A07 Authentification | Routes protégées sans session ; jeton falsifié, `alg=none`, expiré ; rôle du jeton ignoré (relu en base) ; compte désactivé révoqué immédiatement ; hash jamais exposé |
 | A01 Contrôle d'accès | Escalade de privilèges à l'inscription (*mass assignment*), routes admin interdites, champs inconnus refusés, **IDOR** sur annulation / modification / décision |

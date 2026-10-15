@@ -1,6 +1,10 @@
 # Compétence 5 (suite) — Maquettes, accessibilité et éco-conception
 
-Les maquettes ci-dessous sont des *wireframes* basse fidélité. Elles ont servi de base à l'interface réelle (`public/`), qui peut être comparée directement : lancer `npm run dev` puis ouvrir <http://localhost:3000>.
+Les maquettes ci-dessous sont des *wireframes* basse fidélité. Elles ont servi de base à l'interface réelle (`client/`, application Vue), qui peut être comparée directement : lancer `npm run dev` puis ouvrir <http://localhost:3000>.
+
+## Direction artistique
+
+La version finale suit la direction « Registre » (fond crème, encre presque noire, vermillon réservé à l'action et à la sélection, pas d'ombre sauf sur les dialogues, thème sombre automatique). Détails, jetons, contrastes et écarts avec le prototype : [12-design-registre.md](12-design-registre.md). Les wireframes ci-dessous décrivent la structure des écrans.
 
 ## Principes de conception
 
@@ -123,7 +127,7 @@ Les maquettes ci-dessous sont des *wireframes* basse fidélité. Elles ont servi
 | Critère RGAA | Mise en œuvre |
 |---|---|
 | 1.1 Images | Alternative textuelle sur les photos, favicon décoratif |
-| 3.2 Contrastes | Texte ≥ 4,5:1 ; palette définie dans `:root` de `public/css/style.css` |
+| 3.2 Contrastes | Texte ≥ 4,5:1 ; palette définie dans `:root` de `client/src/assets/style.css` (contrastes mesurés et listés dans [12-design-registre.md](12-design-registre.md)) |
 | 3.1 Information par la couleur | Statuts toujours accompagnés d'un texte ; calendrier avec motifs rayés |
 | 5.x Tableaux | `<caption>`, `<th scope="col|row">` ; le calendrier est un vrai tableau |
 | 6.x Liens | Intitulés explicites, texte masqué complétant les boutons répétés (« Annuler *Salle A* ») |
@@ -140,7 +144,7 @@ Contrôle recommandé avant livraison : parcours complet au clavier, lecteur d'�
 
 | Pratique | Application |
 |---|---|
-| Sobriété des ressources | Aucune bibliothèque ni framework, aucune police externe, ≈ 67 Ko de fichiers non compressés |
+| Sobriété des ressources | Vue 3 seul (aucune bibliothèque de composants), aucune police externe, découpage par page (chargement à la demande), ≈ 45 Ko transférés en gzip au premier affichage |
 | Transfert réduit | Compression gzip, cache HTTP (`ETag`, `max-age` en production) |
 | Images | Chargement différé (`loading="lazy"`), dimensions déclarées ; la fiche fonctionne sans image |
 | Peu de requêtes | Un seul fichier CSS, modules JavaScript chargés à la demande par le navigateur |

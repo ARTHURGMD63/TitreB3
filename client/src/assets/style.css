@@ -1,0 +1,471 @@
+/* =====================================================================
+   créneau — feuille de style principale (remplace style.css)
+   Direction « Registre » : dense, calme, encre + vermillon.
+   Aucune ressource externe : polices système, aucune URL data:,
+   aucun style inline requis (compatible CSP style-src 'self').
+   ===================================================================== */
+
+/* ---------- 1. Jetons : thème clair (par défaut) ---------- */
+:root {
+  color-scheme: light;
+
+  /* Couleurs de base */
+  --fond: #F4F2EC;          /* fond de page, papier */
+  --surface: #FFFFFF;       /* cartes, champs */
+  --panneau: #ECE9E1;       /* zones secondaires, survols */
+  --encre: #1B1A17;         /* texte principal */
+  --encre-2: #5C5850;       /* texte secondaire */
+  --trait: #DCD7CB;         /* filets décoratifs */
+  --trait-fort: #858073;    /* bords des champs et boutons (≥ 3:1) */
+  --trait-cellule: #E2DED3; /* bord des cases libres */
+
+  /* Accent */
+  --accent: #C2410C;
+  --accent-survol: #A3360A;
+  --accent-texte: #B23A0A;  /* accent utilisé comme couleur de texte */
+  --sur-accent: #FFFFFF;
+  --accent-doux: #FBE9DF;
+
+  /* États */
+  --ok: #1D6B3A;        --ok-fond: #E2F1E6;
+  --attente: #9A6200;   --attente-fond: #FFF1CC;  --attente-texte: #6E4600;
+  --erreur: #B42318;    --erreur-fond: #FDECEA;   --sur-erreur: #FFFFFF;
+  --moi-fond: #1B1A17;  --moi-texte: #FFFFFF;
+  --ferme-fond: #E6E2D8;
+  --hachure: #A9A292;
+  --focus: #C2410C;
+
+  /* Typographie (polices système uniquement) */
+  --police: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Text", "Segoe UI", Roboto, "Noto Sans", system-ui, sans-serif;
+  --police-mono: ui-monospace, "SF Mono", "Cascadia Mono", "Segoe UI Mono", Menlo, Consolas, monospace;
+  --t-xs: 0.75rem;    /* 12 px */
+  --t-s: 0.8125rem;   /* 13 px */
+  --t-m: 0.875rem;    /* 14 px, texte courant */
+  --t-l: 1.125rem;    /* 18 px */
+  --t-xl: 1.5rem;     /* 24 px */
+  --t-xxl: 1.875rem;  /* 30 px */
+  --interligne: 1.45;
+  --graisse-titre: 680;
+
+  /* Espacements (base 4 px) */
+  --e-1: 4px;  --e-2: 8px;  --e-3: 12px; --e-4: 16px;
+  --e-5: 24px; --e-6: 32px; --e-7: 48px; --e-8: 64px;
+
+  /* Rayons */
+  --r-petit: 4px;
+  --r: 6px;
+  --r-grand: 10px;
+  --r-pilule: 999px;
+
+  /* Ombres : réservées aux éléments flottants (dialogues) */
+  --ombre-flottant: 0 16px 40px -12px rgb(27 26 23 / 0.35), 0 0 0 1px rgb(27 26 23 / 0.06);
+
+  /* Divers */
+  --cible: 36px;        /* hauteur des contrôles ; 44 px au doigt */
+  --duree: 120ms;
+  --largeur-max: 1200px;
+}
+
+/* ---------- 2. Jetons : thème sombre ----------
+   Appliqué automatiquement selon le système, ou forcé avec
+   <html data-theme="sombre">. data-theme="clair" force le clair. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="clair"]) {
+    color-scheme: dark;
+    --fond: #141311; --surface: #1C1B18; --panneau: #26241F;
+    --encre: #EDEAE3; --encre-2: #A8A397;
+    --trait: #34312B; --trait-fort: #7A7569; --trait-cellule: #2F2C27;
+    --accent: #FF7E4A; --accent-survol: #FF9A70; --accent-texte: #FF9466;
+    --sur-accent: #1A0900; --accent-doux: #3A1E12;
+    --ok: #6FD08F; --ok-fond: #17301F;
+    --attente: #E3A92F; --attente-fond: #352A0E; --attente-texte: #F2C766;
+    --erreur: #FF8A7A; --erreur-fond: #3A1A15; --sur-erreur: #1F0703;
+    --moi-fond: #EDEAE3; --moi-texte: #141311;
+    --ferme-fond: #211F1B; --hachure: #625D52; --focus: #FF9466;
+    --ombre-flottant: 0 16px 40px -12px rgb(0 0 0 / 0.7), 0 0 0 1px rgb(255 255 255 / 0.06);
+  }
+}
+:root[data-theme="sombre"] {
+  color-scheme: dark;
+  --fond: #141311; --surface: #1C1B18; --panneau: #26241F;
+  --encre: #EDEAE3; --encre-2: #A8A397;
+  --trait: #34312B; --trait-fort: #7A7569; --trait-cellule: #2F2C27;
+  --accent: #FF7E4A; --accent-survol: #FF9A70; --accent-texte: #FF9466;
+  --sur-accent: #1A0900; --accent-doux: #3A1E12;
+  --ok: #6FD08F; --ok-fond: #17301F;
+  --attente: #E3A92F; --attente-fond: #352A0E; --attente-texte: #F2C766;
+  --erreur: #FF8A7A; --erreur-fond: #3A1A15; --sur-erreur: #1F0703;
+  --moi-fond: #EDEAE3; --moi-texte: #141311;
+  --ferme-fond: #211F1B; --hachure: #625D52; --focus: #FF9466;
+  --ombre-flottant: 0 16px 40px -12px rgb(0 0 0 / 0.7), 0 0 0 1px rgb(255 255 255 / 0.06);
+}
+
+/* ---------- 3. Base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background: var(--fond);
+  color: var(--encre);
+  font: var(--t-m) / var(--interligne) var(--police);
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, h4 { margin: 0; font-weight: var(--graisse-titre); letter-spacing: -0.015em; line-height: 1.15; text-wrap: balance; }
+h1 { font-size: var(--t-xxl); }
+h2 { font-size: var(--t-l); }
+h3 { font-size: var(--t-l); }
+h4 { font-size: var(--t-m); }
+p { margin: 0; text-wrap: pretty; }
+a { color: var(--accent-texte); text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
+a:hover { color: var(--encre); }
+b, strong { font-weight: 650; }
+::selection { background: var(--accent-doux); color: var(--encre); }
+
+/* Focus clavier : toujours visible, 3 px, décalé */
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+:focus:not(:focus-visible) { outline: none; }
+
+/* Texte réservé aux lecteurs d'écran */
+.sr-only {
+  position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+/* Lien d'évitement : visible seulement au focus */
+.evitement { position: absolute; left: var(--e-4); top: -100px; z-index: 50; padding: var(--e-2) var(--e-3); background: var(--encre); color: var(--fond); border-radius: var(--r); }
+.evitement:focus { top: var(--e-2); color: var(--fond); }
+
+.doux { color: var(--encre-2); }
+.mono { white-space: nowrap; font-family: var(--police-mono); font-variant-numeric: tabular-nums; font-size: 0.94em; }
+.surtitre { font-size: var(--t-xs); font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--encre-2); }
+.surtitre + h1, .surtitre + h2 { margin-top: var(--e-1); }
+
+/* Icônes SVG (sprite <use href="#i-…">) */
+/* Sprite SVG : ne doit pas occuper de place */
+.sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
+.icone { width: 16px; height: 16px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+a .icone, p .icone { display: inline-block; vertical-align: -3px; }
+
+/* ---------- 4. Mise en page ---------- */
+.conteneur { width: 100%; max-width: var(--largeur-max); margin-inline: auto; padding-inline: var(--e-6); }
+main.conteneur { display: flex; flex-direction: column; gap: var(--e-6); padding-block: var(--e-6) var(--e-8); }
+.pile { display: flex; flex-direction: column; gap: var(--e-4); min-width: 0; }
+.pile.serree { gap: 6px; }
+.ligne { display: flex; flex-wrap: wrap; align-items: flex-end; gap: var(--e-3); min-width: 0; }
+.ligne.entre { justify-content: space-between; align-items: center; }
+.ligne > .champ { flex: 1 1 160px; }
+.ligne > .champ:has(> .onglets) { flex: 0 0 auto; }
+.grille { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 290px), 1fr)); gap: var(--e-4); }
+/* Deux colonnes : contenu + colonne latérale (fiche, mon espace) */
+.fiche { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: var(--e-5); align-items: start; }
+.fiche > aside { position: sticky; top: 76px; }
+
+/* ---------- 5. En-tête de navigation ---------- */
+.entete { position: sticky; top: 0; z-index: 10; background: var(--surface); border-bottom: 1px solid var(--trait); }
+.entete > .conteneur { display: flex; align-items: center; gap: var(--e-6); min-height: 58px; }
+.logo { display: inline-flex; align-items: center; gap: var(--e-2); color: var(--encre); text-decoration: none; font-size: 1.25rem; font-weight: 700; letter-spacing: -0.03em; }
+.logo:hover { color: var(--encre); }
+.logo svg { width: 22px; height: 22px; flex: none; }
+.logo svg rect { fill: none; stroke: currentColor; stroke-width: 1.6; }
+.logo svg rect:last-child { fill: var(--accent); stroke: var(--accent); }
+.entete nav { display: flex; gap: 2px; }
+.entete nav a {
+  position: relative; display: inline-flex; align-items: center; gap: var(--e-2);
+  padding: 7px var(--e-3); border-radius: var(--r);
+  color: var(--encre-2); font-weight: 500; text-decoration: none; white-space: nowrap;
+  transition: background-color var(--duree), color var(--duree);
+}
+.entete nav a:hover { background: var(--panneau); color: var(--encre); }
+.entete nav a[aria-current="page"] { color: var(--encre); font-weight: 600; }
+.entete nav a[aria-current="page"]::after { content: ""; position: absolute; left: var(--e-3); right: var(--e-3); bottom: -11px; height: 2px; background: var(--accent); }
+.compteur { min-width: 18px; height: 18px; padding: 0 5px; display: inline-grid; place-items: center; border-radius: var(--r-pilule); background: var(--accent); color: var(--sur-accent); font: 700 11px/1 var(--police-mono); }
+.compte { margin-left: auto; display: flex; align-items: center; gap: var(--e-3); }
+.compte > span:first-child { display: flex; flex-direction: column; align-items: flex-end; font-size: var(--t-s); line-height: 1.25; }
+.compte > span:first-child small { font-size: var(--t-xs); color: var(--encre-2); }
+.avatar { width: 32px; height: 32px; display: grid; place-items: center; flex: none; border-radius: var(--r); background: var(--panneau); font-size: var(--t-xs); font-weight: 650; }
+
+/* ---------- 6. Cartes ---------- */
+.carte { position: relative; display: flex; flex-direction: column; gap: var(--e-3); min-width: 0; padding: var(--e-4); background: var(--surface); border: 1px solid var(--trait); border-radius: var(--r); transition: border-color var(--duree); }
+.carte > header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--e-2); }
+.carte h3 a { color: inherit; text-decoration: none; }
+.carte h3 a::after { content: ""; position: absolute; inset: 0; border-radius: inherit; } /* carte entière cliquable */
+.carte:has(h3 a:hover) { border-color: var(--trait-fort); }
+.carte:has(h3 a:hover) h3 a { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
+.carte h3 a:focus-visible { outline: none; }
+.carte:has(h3 a:focus-visible) { outline: 3px solid var(--focus); outline-offset: 2px; }
+.meta { display: flex; flex-wrap: wrap; gap: var(--e-1) var(--e-4); margin: 0; padding: 0; list-style: none; font-size: var(--t-s); color: var(--encre-2); }
+.meta li { display: inline-flex; align-items: center; gap: 6px; }
+.etiquettes { display: flex; flex-wrap: wrap; gap: var(--e-1); margin: 0; padding: 0; list-style: none; }
+.etiquettes li { white-space: nowrap; padding: 1px var(--e-2); border: 1px solid var(--trait); border-radius: var(--r-petit); font-size: var(--t-xs); color: var(--encre-2); }
+.stat strong { font-size: var(--t-xxl); font-weight: var(--graisse-titre); letter-spacing: -0.02em; line-height: 1; font-variant-numeric: tabular-nums; }
+
+/* ---------- 7. Boutons ---------- */
+button, .bouton {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--e-2);
+  min-height: var(--cible); margin: 0; padding: 0 var(--e-4);
+  border: 1px solid var(--accent); border-radius: var(--r);
+  background: var(--accent); color: var(--sur-accent);
+  font: 600 var(--t-m) / 1 var(--police); text-decoration: none; white-space: nowrap;
+  cursor: pointer;
+  transition: background-color var(--duree), border-color var(--duree), color var(--duree), transform var(--duree);
+}
+button:hover, .bouton:hover { background: var(--accent-survol); border-color: var(--accent-survol); color: var(--sur-accent); }
+button:active, .bouton:active { transform: translateY(1px); }
+button:disabled, button[aria-disabled="true"] { opacity: 0.45; cursor: not-allowed; transform: none; }
+button.secondaire, .bouton.secondaire { background: var(--surface); border-color: var(--trait-fort); color: var(--encre); }
+button.secondaire:hover, .bouton.secondaire:hover { background: var(--panneau); border-color: var(--encre); color: var(--encre); }
+button.danger, .bouton.danger { background: var(--erreur); border-color: var(--erreur); color: var(--sur-erreur); }
+button.danger:hover, .bouton.danger:hover { background: var(--erreur); border-color: var(--encre); color: var(--sur-erreur); box-shadow: inset 0 0 0 1px var(--encre); }
+button.discret { background: transparent; border-color: transparent; color: var(--encre-2); }
+button.discret:hover { background: var(--panneau); border-color: transparent; color: var(--encre); }
+.petit { min-height: 30px; padding: 0 var(--e-3); font-size: var(--t-s); }
+/* Bouton contenant seulement une icône : carré */
+button.icone-seule { padding: 0; width: var(--cible); }
+button.petit.icone-seule { width: 30px; }
+
+/* ---------- 8. Formulaires ---------- */
+.champ { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.champ > label, .champ > .libelle, .champ > .ligne > label { font-size: var(--t-s); font-weight: 600; color: var(--encre); }
+.champ small { font-size: var(--t-xs); color: var(--encre-2); }
+input:not([type="checkbox"]):not([type="radio"]), select, textarea {
+  width: 100%; min-height: var(--cible); margin: 0; padding: 0 var(--e-3);
+  border: 1px solid var(--trait-fort); border-radius: var(--r);
+  background: var(--surface); color: var(--encre); font: inherit;
+  transition: border-color var(--duree), box-shadow var(--duree);
+}
+textarea { min-height: 84px; padding: var(--e-2) var(--e-3); line-height: var(--interligne); resize: vertical; }
+select {
+  appearance: none; padding-right: 32px; cursor: pointer;
+  background-image: linear-gradient(45deg, transparent 50%, currentColor 50%), linear-gradient(135deg, currentColor 50%, transparent 50%);
+  background-position: calc(100% - 16px) 52%, calc(100% - 11px) 52%;
+  background-size: 5px 5px; background-repeat: no-repeat;
+}
+input::placeholder, textarea::placeholder { color: var(--encre-2); opacity: 1; }
+input:hover, select:hover, textarea:hover { border-color: var(--encre-2); }
+input:focus-visible, select:focus-visible, textarea:focus-visible { border-color: var(--focus); outline-offset: 1px; }
+input:disabled, select:disabled, textarea:disabled { background: var(--panneau); color: var(--encre-2); cursor: not-allowed; }
+[aria-invalid="true"] { border-color: var(--erreur) !important; box-shadow: inset 0 0 0 1px var(--erreur); }
+input[type="checkbox"], input[type="radio"] { width: 18px; height: 18px; margin: 0; accent-color: var(--accent); flex: none; }
+.case { display: flex; align-items: flex-start; gap: var(--e-2); font-size: var(--t-s); cursor: pointer; }
+.case input { margin-top: 1px; }
+/* Interrupteur : <input type="checkbox" role="switch"> + texte visible à côté */
+input[role="switch"] { appearance: none; position: relative; width: 36px; height: 20px; border-radius: var(--r-pilule); background: var(--trait-fort); cursor: pointer; transition: background-color var(--duree); }
+input[role="switch"]::before { content: ""; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: var(--surface); transition: transform var(--duree); }
+input[role="switch"]:checked { background: var(--ok); }
+input[role="switch"]:checked::before { transform: translateX(16px); }
+
+/* ---------- 9. Contrôle segmenté (aria-pressed) ---------- */
+.onglets { display: inline-flex; gap: 2px; max-width: 100%; padding: 3px; overflow-x: auto; background: var(--panneau); border: 1px solid var(--trait); border-radius: var(--r); scrollbar-width: none; }
+.onglets button { min-height: calc(var(--cible) - 8px); padding: 0 var(--e-3); background: transparent; border: 0; border-radius: var(--r-petit); color: var(--encre-2); font-weight: 500; }
+.onglets button:hover { background: var(--surface); color: var(--encre); }
+.onglets button:active { transform: none; }
+.onglets button[aria-pressed="true"] { background: var(--encre); color: var(--fond); font-weight: 600; }
+
+/* ---------- 10. Badges de statut (texte + forme, jamais la couleur seule) ---------- */
+.badge { display: inline-flex; align-items: center; gap: 6px; flex: none; padding: 2px var(--e-2); border: 1px solid transparent; border-radius: var(--r-petit); background: var(--panneau); color: var(--encre-2); font-size: var(--t-xs); font-weight: 600; line-height: 1.4; white-space: nowrap; }
+.badge::before { content: ""; width: 7px; height: 7px; flex: none; border-radius: 50%; background: currentColor; }
+/* Validée / disponible : pastille pleine */
+.badge-validee, .badge-dispo { background: var(--ok-fond); color: var(--ok); }
+/* En attente / validation requise : anneau + bord tireté */
+.badge-en_attente, .badge-validation { background: var(--attente-fond); color: var(--attente-texte); border: 1px dashed var(--attente); }
+.badge-en_attente::before, .badge-validation::before { background: transparent; border: 1.5px solid currentColor; }
+/* Refusée : barre */
+.badge-refusee { background: var(--erreur-fond); color: var(--erreur); }
+.badge-refusee::before { width: 8px; height: 2px; border-radius: 1px; }
+/* Annulée : carré évidé */
+.badge-annulee { background: var(--panneau); color: var(--encre-2); }
+.badge-annulee::before { border-radius: 1px; background: transparent; border: 1.5px solid currentColor; }
+/* Terminée : contour, pastille carrée pleine */
+.badge-terminee { background: transparent; border-color: var(--trait-fort); color: var(--encre-2); }
+.badge-terminee::before { border-radius: 1px; }
+/* Complet ce jour : barre, neutre */
+.badge-complet { background: var(--panneau); color: var(--encre-2); }
+.badge-complet::before { width: 8px; height: 2px; border-radius: 1px; }
+
+/* ---------- 11. Messages de confirmation / d'erreur ---------- */
+.message { display: flex; align-items: flex-start; gap: var(--e-3); padding: var(--e-3) var(--e-4); border: 1px solid; border-radius: var(--r); color: var(--encre); font-size: var(--t-m); }
+.message::before { content: ""; flex: none; width: 10px; height: 10px; margin-top: 0.38em; border-radius: 50%; }
+.message-ok { background: var(--ok-fond); border-color: var(--ok); }
+.message-ok::before { background: var(--ok); }
+.message-erreur { background: var(--erreur-fond); border-color: var(--erreur); }
+.message-erreur::before { width: 9px; height: 9px; border-radius: 1px; background: var(--erreur); transform: rotate(45deg); }
+.message > * { min-width: 0; }
+
+/* ---------- 12. Tableaux ---------- */
+table { width: 100%; border-collapse: collapse; font-size: var(--t-m); }
+th { padding: var(--e-2) var(--e-3); border-bottom: 1px solid var(--trait-fort); text-align: left; font-size: var(--t-xs); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--encre-2); white-space: nowrap; }
+td { padding: var(--e-3); border-bottom: 1px solid var(--trait); vertical-align: middle; }
+td.nowrap, td.mono { white-space: nowrap; }
+td small { display: block; font-size: var(--t-xs); color: var(--encre-2); }
+tbody tr { transition: background-color var(--duree); }
+tbody tr:hover { background: var(--panneau); }
+td .actions { flex-wrap: nowrap; }
+td input:not([type="checkbox"]), td select { min-height: 32px; }
+td input[type="number"] { max-width: 110px; }
+/* Zone de défilement horizontal (tableaux larges, calendrier) */
+.defilement { max-width: 100%; overflow-x: auto; overscroll-behavior-x: contain; -webkit-overflow-scrolling: touch; }
+.defilement:focus-visible { outline-offset: 0; }
+/* Planning responsable */
+.planning td, .planning th[scope="row"] { vertical-align: top; }
+.planning td { min-width: 150px; font-size: var(--t-s); }
+.planning th[scope="row"] { min-width: 170px; text-transform: none; letter-spacing: 0; font-size: var(--t-s); color: var(--encre); }
+.planning ul { display: flex; flex-direction: column; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.planning li { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; }
+/* Carte de chaleur (créneaux saturés) : le pourcentage est toujours écrit */
+.chaleur td { text-align: center; font-family: var(--police-mono); font-size: var(--t-s); font-variant-numeric: tabular-nums; }
+.chaleur tbody tr:hover { background: none; }
+.chaleur td[data-niveau="1"] { background: color-mix(in oklab, var(--accent) 6%, var(--surface)); }
+.chaleur td[data-niveau="2"] { background: color-mix(in oklab, var(--accent) 14%, var(--surface)); }
+.chaleur td[data-niveau="3"] { background: color-mix(in oklab, var(--accent) 24%, var(--surface)); }
+.chaleur td[data-niveau="4"] { background: color-mix(in oklab, var(--accent) 36%, var(--surface)); font-weight: 700; }
+.chaleur td[data-niveau="0"] { background: radial-gradient(var(--hachure) 0.8px, transparent 1.1px) 0 0 / 5px 5px, var(--ferme-fond); color: var(--encre-2); font-family: var(--police); }
+
+/* ---------- 13. Calendrier (vrai <table>, cases libres = <button>) ---------- */
+.calendrier { width: 100%; border-collapse: separate; border-spacing: 3px; table-layout: fixed; font-size: var(--t-xs); }
+.calendrier.semaine { min-width: 560px; }
+.calendrier th { padding: 0; border: 0; text-transform: none; letter-spacing: 0; color: var(--encre-2); }
+.calendrier thead th { padding: 0 var(--e-1) var(--e-2); text-align: left; font-size: var(--t-xs); font-weight: 600; }
+.calendrier thead th b { display: block; font-size: var(--t-l); font-weight: var(--graisse-titre); letter-spacing: -0.015em; color: var(--encre); }
+.calendrier thead th[aria-current] , .calendrier thead th[aria-current] b { color: var(--accent-texte); }
+.calendrier:not(.mois) thead th:first-child { width: 52px; }
+.calendrier tbody th { position: sticky; left: 0; z-index: 1; padding-right: var(--e-2); background: var(--surface); text-align: right; vertical-align: middle; font: 500 var(--t-xs) / 1 var(--police-mono); }
+.calendrier td { padding: 0; border: 0; vertical-align: top; }
+.calendrier tbody tr:hover { background: none; }
+.cellule {
+  display: flex; align-items: center; gap: 4px;
+  width: 100%; height: 28px; min-height: 0; margin: 0; padding: 0 var(--e-2);
+  border: 1px solid var(--trait-cellule); border-radius: var(--r-petit);
+  background: var(--surface); color: var(--encre);
+  font: 600 var(--t-xs) / 1 var(--police);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: left;
+}
+button.cellule { justify-content: flex-start; cursor: pointer; transition: background-color var(--duree), border-color var(--duree); }
+button.cellule:hover { background: var(--accent-doux); border-color: var(--accent); color: var(--accent-texte); }
+button.cellule:hover:empty::after { content: "+"; margin-inline: auto; font-size: 15px; font-weight: 500; }
+button.cellule:active { transform: none; }
+button.cellule:focus-visible { outline-offset: 1px; position: relative; z-index: 2; }
+/* Occupé : hachures diagonales */
+.cellule.occupe { background: repeating-linear-gradient(135deg, var(--hachure) 0 1px, transparent 1px 6px), var(--panneau); border-color: transparent; color: var(--encre-2); }
+/* En attente de validation : bord tireté, fond ambré */
+.cellule.attente { background: var(--attente-fond); border: 1px dashed var(--attente); color: var(--attente-texte); }
+/* Ma réservation : aplat encre */
+.cellule.moi { background: var(--moi-fond); border-color: var(--moi-fond); color: var(--moi-texte); }
+/* Passé / fermé : trame de points */
+.cellule.ferme { background: radial-gradient(var(--hachure) 0.8px, transparent 1.1px) 0 0 / 5px 5px, var(--ferme-fond); border-color: transparent; color: var(--encre-2); }
+/* Sélection en cours : aplat accent */
+.cellule.choisi, button.cellule.choisi, button.cellule.choisi:hover { background: var(--accent); border-color: var(--accent); color: var(--sur-accent); font-weight: 700; }
+/* Case déjà prise incluse dans une plage saisie au clavier : conflit */
+.cellule.conflit { outline: 2px solid var(--erreur); outline-offset: -2px; }
+/* Vue jour : cases plus hautes */
+.calendrier.jour .cellule { height: 32px; font-size: var(--t-s); }
+/* Vue mois */
+.calendrier.mois td { height: 1px; }
+.calendrier.mois .cellule { flex-direction: column; align-items: stretch; justify-content: space-between; gap: 6px; height: 72px; padding: var(--e-2); white-space: normal; }
+.calendrier.mois .cellule b { font-size: var(--t-m); }
+.calendrier.mois .cellule .jauge { height: 4px; }
+.calendrier.mois button.cellule:hover .jauge::-webkit-progress-value { background: var(--accent); }
+/* Légende */
+.legende { display: flex; flex-wrap: wrap; gap: var(--e-2) var(--e-4); margin: 0; padding: var(--e-3) 0 0; list-style: none; border-top: 1px solid var(--trait); font-size: var(--t-s); color: var(--encre-2); }
+.legende li { display: inline-flex; align-items: center; gap: var(--e-2); white-space: nowrap; }
+.legende .cellule { width: 24px; height: 16px; padding: 0; flex: none; }
+
+/* ---------- 14. Jauge (<progress class="jauge">) ---------- */
+.jauge { appearance: none; -webkit-appearance: none; display: block; width: 100%; height: 8px; border: 0; border-radius: var(--r-pilule); background: var(--panneau); color: var(--encre); overflow: hidden; }
+.jauge::-webkit-progress-bar { background: var(--panneau); border-radius: var(--r-pilule); }
+.jauge::-webkit-progress-value { background: var(--encre); border-radius: var(--r-pilule); transition: width var(--duree); }
+.jauge::-moz-progress-bar { background: var(--encre); border-radius: var(--r-pilule); }
+.jauge.alerte::-webkit-progress-value { background: var(--accent); }
+.jauge.alerte::-moz-progress-bar { background: var(--accent); }
+
+/* ---------- 15. Listes (notifications, classements) ---------- */
+.liste { margin: 0; padding: 0; list-style: none; }
+.liste > li { display: flex; gap: var(--e-3); padding: var(--e-3) 0; border-bottom: 1px solid var(--trait); }
+.liste > li:first-child { padding-top: 0; }
+.liste > li:last-child { padding-bottom: 0; border-bottom: 0; }
+.liste > li::before { content: ""; width: 8px; height: 8px; margin-top: 0.42em; flex: none; border-radius: 50%; }
+.liste > li.non-lu::before { background: var(--accent); }
+.liste.barres > li { display: grid; grid-template-columns: minmax(0, 1fr) 38% 3.2em; align-items: center; gap: var(--e-3); }
+.liste.barres > li::before { display: none; }
+.liste.barres > li > :last-child { text-align: right; }
+
+/* ---------- 16. Pagination ---------- */
+.pagination { display: flex; flex-wrap: wrap; align-items: center; gap: var(--e-1); }
+.pagination button { min-width: var(--cible); padding: 0 var(--e-2); background: var(--surface); border-color: var(--trait); color: var(--encre); font-weight: 500; }
+.pagination button:hover { background: var(--panneau); border-color: var(--trait-fort); color: var(--encre); }
+.pagination button[aria-current="page"] { background: var(--encre); border-color: var(--encre); color: var(--fond); font-weight: 650; }
+
+/* ---------- 17. Boîtes de dialogue (<dialog> natif) ---------- */
+dialog { width: min(520px, calc(100vw - 32px)); max-height: calc(100dvh - 32px); padding: 0; border: 1px solid var(--trait); border-radius: var(--r-grand); background: var(--surface); color: var(--encre); box-shadow: var(--ombre-flottant); }
+dialog::backdrop { background: rgb(20 19 17 / 0.5); }
+dialog > form, dialog > div { display: flex; flex-direction: column; gap: var(--e-4); padding: var(--e-5); }
+dialog h2 { font-size: var(--t-xl); }
+dialog .actions { margin-top: var(--e-2); }
+dialog[open] { animation: apparition 160ms ease-out; }
+@keyframes apparition { from { opacity: 0; transform: translateY(8px); } }
+
+/* Rangée de boutons */
+.actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: var(--e-2); }
+
+/* ---------- 18. États vides et chargement ---------- */
+.vide { display: flex; flex-direction: column; align-items: center; gap: var(--e-3); padding: var(--e-7) var(--e-5); border: 1px dashed var(--trait-fort); border-radius: var(--r); text-align: center; color: var(--encre-2); }
+.vide .icone { width: 28px; height: 28px; stroke-width: 1.4; }
+.vide strong { color: var(--encre); font-size: var(--t-m); }
+.vide p { max-width: 42ch; }
+.chargement { display: inline-flex; align-items: center; gap: var(--e-2); color: var(--encre-2); font-size: var(--t-s); }
+.chargement::before { content: ""; width: 16px; height: 16px; flex: none; border: 2px solid var(--trait); border-top-color: var(--accent); border-radius: 50%; animation: tourne 0.8s linear infinite; }
+.squelette { display: block; height: 12px; border-radius: var(--r-petit); background: linear-gradient(90deg, var(--panneau) 0 40%, var(--trait) 50%, var(--panneau) 60% 100%) 0 0 / 300% 100%; animation: balaye 1.4s linear infinite; }
+@keyframes tourne { to { transform: rotate(360deg); } }
+@keyframes balaye { from { background-position: 100% 0; } to { background-position: 0 0; } }
+
+/* ---------- 19. Connexion / inscription ---------- */
+main.conteneur.auth { max-width: 420px; min-height: 100dvh; justify-content: center; gap: var(--e-5); padding-block: var(--e-7); }
+.auth .carte { padding: var(--e-5); gap: var(--e-4); }
+.auth .logo { align-self: center; font-size: 1.5rem; }
+
+/* ---------- 20. Mobile et écrans tactiles ---------- */
+@media (pointer: coarse) {
+  :root { --cible: 44px; }
+  .petit { min-height: 44px; }
+  button.petit.icone-seule { width: 44px; }
+  .cellule { height: 44px; }
+}
+@media (max-width: 1080px) {
+  .fiche { grid-template-columns: minmax(0, 1fr); }
+  .fiche > aside { position: static; }
+}
+@media (max-width: 720px) {
+  :root { --cible: 44px; }
+  .conteneur { padding-inline: var(--e-4); }
+  main.conteneur { gap: var(--e-5); padding-block: var(--e-5) var(--e-7); }
+  h1 { font-size: var(--t-xl); }
+  input:not([type="checkbox"]):not([type="radio"]), select, textarea { font-size: 16px; } /* évite le zoom iOS */
+  .petit { min-height: 44px; }
+  button.petit.icone-seule { width: 44px; }
+  .ligne > .champ { flex: 1 1 100%; }
+  .actions > button, .actions > .bouton { flex: 1 1 auto; }
+  /* En-tête : logo + compte, puis navigation défilante */
+  .entete > .conteneur { flex-wrap: wrap; gap: 0 var(--e-3); min-height: 0; padding-top: var(--e-2); }
+  .entete nav { order: 3; width: calc(100% + 2 * var(--e-4)); margin-inline: calc(-1 * var(--e-4)); padding: var(--e-1) var(--e-4) 0; overflow-x: auto; scrollbar-width: none; }
+  .entete nav a { min-height: 44px; }
+  .entete nav a[aria-current="page"]::after { bottom: 0; }
+  .compte > span:first-child { display: none; }
+  .cellule { height: 44px; }
+  .calendrier.mois .cellule { height: 64px; padding: 6px; }
+  .calendrier.mois .cellule span { display: none; }
+  /* Tableaux .empile : une carte par ligne, libellés tirés de data-label */
+  table.empile thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  table.empile, .empile tbody, .empile tr, .empile td { display: block; width: 100%; }
+  .empile tr { padding: var(--e-3) 0; border-bottom: 1px solid var(--trait); }
+  .empile tbody tr:hover { background: none; }
+  .empile td { display: flex; justify-content: space-between; align-items: center; gap: var(--e-3); padding: var(--e-1) 0; border: 0; text-align: right; }
+  .empile td::before { content: attr(data-label); flex: none; font-size: var(--t-xs); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--encre-2); text-align: left; }
+  .empile td > select, .empile td > input { max-width: 60%; }
+  .empile td small { text-align: right; }
+  /* Dialogue en feuille basse */
+  dialog { width: 100%; max-width: 100%; margin: auto 0 0; border-radius: var(--r-grand) var(--r-grand) 0 0; }
+}
+
+/* ---------- 21. Mouvement réduit ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}

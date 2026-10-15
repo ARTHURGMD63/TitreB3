@@ -7,7 +7,7 @@
 | **A01 Contrôle d'accès défaillant** | Rôle relu en base à chaque requête ; contrôle de propriété (réservation = son auteur) ; responsable limité à ses ressources ; routes `admin` réservées | `tests/security` — Contrôle d'accès, IDOR |
 | **A02 Défaillances cryptographiques** | bcrypt (coût 12) ; jetons de réinitialisation 256 bits stockés en SHA-256 ; HTTPS + HSTS en production ; cookie `Secure` | `api.test.js` (hash `$2…`), configuration Caddy |
 | **A03 Injection** | Requêtes préparées ; filtres Mongo typés ; validation zod ; aucune concaténation | `tests/security` — Injection SQL / NoSQL |
-| **A03 XSS** | Aucune injection de HTML (nœuds texte uniquement), CSP sans `unsafe-inline`, cookie HttpOnly | `tests/security` — XSS (dont analyse statique de `public/`) |
+| **A03 XSS** | Gabarits Vue qui échappent le HTML, `v-html` interdit (ESLint), CSP sans `unsafe-inline`, cookie HttpOnly | `tests/security` — XSS (dont analyse statique de `client/`) |
 | **A04 Conception non sécurisée** | Double contrôle des conflits (application + base), verrou transactionnel du quota, moindre privilège sur la base | Tests de concurrence |
 | **A05 Mauvaise configuration** | Helmet, `X-Powered-By` retiré, erreurs génériques, démarrage refusé sans secret fort, aucun port de base exposé | `tests/security` — En-têtes |
 | **A06 Composants vulnérables** | `npm audit` et Trivy en CI, dépendances à jour | CI |

@@ -1,18 +1,30 @@
-# Image de l'application (build en deux étapes pour une image finale légère et sans outils de développement)
+# Image de l'application (build en trois étapes pour une image finale légère et sans outils de développement)
+
+# 1. Construction de l'interface Vue (Vite)
+FROM node:22-alpine AS interface
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci
+COPY vite.config.js ./
+COPY client ./client
+RUN npm run build
+
+# 2. Dépendances de production du serveur
 FROM node:22-alpine AS dependances
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci --omit=dev
 
+# 3. Image finale
 FROM node:22-alpine
 ENV NODE_ENV=production
 WORKDIR /app
 # Exécution avec un utilisateur non privilégié (principe du moindre privilège)
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 COPY --from=dependances /app/node_modules ./node_modules
+COPY --from=interface /app/client/dist ./client/dist
 COPY package.json ./
 COPY src ./src
-COPY public ./public
 COPY db ./db
 COPY scripts ./scripts
 USER appuser

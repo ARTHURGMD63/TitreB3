@@ -14,7 +14,7 @@ import authRoutes from './presentation/routes/auth.js';
 import reservationRoutes from './presentation/routes/reservations.js';
 import ressourceRoutes from './presentation/routes/ressources.js';
 
-const dossierPublic = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'public');
+const dossierClient = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'client', 'dist');
 
 export function creerApp() {
   const app = express();
@@ -60,7 +60,7 @@ export function creerApp() {
   app.use('/api/admin', adminRoutes);
   app.use('/api', routeInconnue);
 
-  app.use(express.static(dossierPublic, { maxAge: config.enProduction ? '1d' : 0, etag: true }));
+  app.use(express.static(dossierClient, { maxAge: config.enProduction ? '1d' : 0, etag: true }));
   app.use(gestionnaireErreurs);
   return app;
 }

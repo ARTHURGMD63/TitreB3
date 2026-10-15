@@ -51,3 +51,11 @@ export const libelleMois = (jour) =>
 export const STATUTS = {
   en_attente: 'En attente', validee: 'Validée', refusee: 'Refusée', terminee: 'Terminée', annulee: 'Annulée'
 };
+
+// Libellés courts pour les tableaux et en-têtes de calendrier
+export const jourCourt = (jour) =>
+  versUtc(jour.a, jour.m, jour.j, 12).toLocaleDateString('fr-FR', { timeZone: FUSEAU, weekday: 'short' });
+export const formaterJourCourt = (iso) =>
+  new Date(iso).toLocaleDateString('fr-FR', { timeZone: FUSEAU, weekday: 'short', day: 'numeric', month: 'short' });
+export const horaire = (debut, fin) => `${formaterHeure(debut)}–${formaterHeure(fin)}`;
+export const ROLES = { utilisateur: 'Utilisateur', responsable: 'Responsable', admin: 'Administrateur' };

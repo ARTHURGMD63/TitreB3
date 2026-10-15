@@ -28,7 +28,7 @@ flowchart TB
 | **Métier** | `src/services/` | Règles de gestion, orchestration, transactions, journalisation, notifications. `regles/` contient des fonctions **pures** (sans E/S), donc testables unitairement | Connaître Express (`req`, `res`) |
 | **Accès aux données** | `src/repositories/`, `src/db/` | Seule couche qui parle à PostgreSQL et MongoDB ; requêtes préparées ; renvoie des objets simples | Appliquer une règle métier |
 
-Les dépendances vont toujours vers le bas. Le frontend (`public/`) ne connaît que l'API JSON.
+Les dépendances vont toujours vers le bas. Le frontend (`client/`, application Vue) ne connaît que l'API JSON.
 
 ### Exemple : réserver un créneau
 
@@ -67,7 +67,7 @@ sequenceDiagram
 | **Contrainte d'exclusion PostgreSQL** en plus du contrôle applicatif | Contrôle applicatif seul | Un contrôle applicatif seul laisse passer deux réservations simultanées. La base est l'arbitre final ; l'application fournit des messages et des alternatives. |
 | **JWT dans un cookie HttpOnly + SameSite=Strict + jeton CSRF** | JWT en `localStorage` ; sessions serveur | Le cookie HttpOnly n'est pas lisible par un script (impact réduit d'une XSS). Le rôle est relu en base à chaque requête : un compte désactivé est révoqué immédiatement. |
 | **bcrypt** | Argon2 | Autorisé par le cahier des charges ; pur JavaScript, sans compilation native. Coût 12 (≈ 250 ms). |
-| **Frontend sans framework** | React, Vue | Éco-conception, surface d'attaque XSS minimale, maîtrise totale de l'accessibilité. Compromis : plus de code de gabarit manuel. |
+| **Frontend Vue 3 + Vite** | JavaScript natif, React | Composants réutilisables et état réactif, courbe d'apprentissage douce, gabarits qui échappent le HTML par défaut (XSS), bundle léger avec découpage par page. Le build (`client/dist`) est servi par Express : un seul conteneur en production. |
 | **API JSON REST** | GraphQL | Besoins simples et stables, outillage plus léger, tests plus directs. |
 | **Migrations SQL versionnées** | ORM avec synchronisation automatique | Contrôle total du schéma (contraintes avancées), historique reproductible dans `schema_migrations`. |
 
@@ -104,7 +104,8 @@ src/
   utils/         erreurs.js, temps.js (fuseau horaire)
 db/migrations/   001_init.sql
 scripts/         init-db.js (migrations + droits) · seed.js (démo)
-public/          index.html · css/ · js/ (app, api, dom, calendrier, pages/)
+client/          Vue 3 : index.html · src/ (main, App.vue, router, store, api) · components/ · views/ (+ admin/) · assets/style.css
+vite.config.js   configuration de Vite (build vers client/dist)
 tests/           unit/ · integration/ · security/
 deploy/          Caddyfile · .env.prod.example
 docs/            documentation technique
