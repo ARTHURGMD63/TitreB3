@@ -23,7 +23,7 @@ flowchart LR
 
 ## Intégration continue (`ci.yml`)
 
-Déclenchée à chaque *push* sur `main` / `develop` et chaque Pull Request.
+Déclenchée à chaque *push* sur `main` et sur chaque Pull Request vers `main`.
 
 | Job | Contenu | Échec si… |
 |---|---|---|
