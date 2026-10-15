@@ -74,9 +74,6 @@ jobs:
       - name: Construction de l'image
         run: docker build -t reservation-app:ci .
       - name: Analyse de vulnérabilités de l'image (Trivy)
-        uses: aquasecurity/trivy-action@0.28.0
-        with:
-          image-ref: reservation-app:ci
-          severity: CRITICAL
-          exit-code: "1"
-          ignore-unfixed: true
+        run: |
+          docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy:0.58.1 \
+            image --severity CRITICAL --exit-code 1 --ignore-unfixed reservation-app:ci

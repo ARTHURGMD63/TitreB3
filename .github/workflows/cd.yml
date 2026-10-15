@@ -56,7 +56,8 @@ jobs:
     steps:
       - name: Serveur non configuré
         if: env.DEPLOY_HOST == ''
-        run: echo "Secrets DEPLOY_* absents : déploiement ignoré (voir docs/10-devops.md)."
+        run: |
+          echo "Secrets DEPLOY_* absents, deploiement ignore (voir docs/10-devops.md)."
       - name: Déploiement par SSH
         if: env.DEPLOY_HOST != ''
         uses: appleboy/ssh-action@v1.2.0
@@ -82,7 +83,8 @@ jobs:
     steps:
       - name: Serveur non configuré
         if: env.DEPLOY_HOST == ''
-        run: echo "Secrets DEPLOY_* absents : déploiement ignoré (voir docs/10-devops.md)."
+        run: |
+          echo "Secrets DEPLOY_* absents, deploiement ignore (voir docs/10-devops.md)."
       - name: Déploiement par SSH
         if: env.DEPLOY_HOST != ''
         uses: appleboy/ssh-action@v1.2.0
